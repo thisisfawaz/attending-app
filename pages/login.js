@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useRouter } from 'next/router';
 
@@ -9,47 +9,46 @@ export default function Login() {
   const [error, setError] = useState('');
   const router = useRouter();
 
+  useEffect(() => {
+    // Check if already logged in
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'the4therfirm@gmail.com';
+        if (session.user.email === adminEmail) {
+          router.push('/admin');
+        }
+      }
+    };
+    checkSession();
+  }, []);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
-      // Get admin from database
-      const { data: admin, error: adminError } = await supabase
-        .from('admins')
-        .select('*')
-        .eq('email', email)
-        .single();
+      // Sign in with Supabase Auth
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
 
-      if (adminError || !admin) {
+      if (signInError) {
         setError('Invalid email or password');
         setLoading(false);
         return;
       }
 
-      // Hash the entered password using SHA-256
-      const encoder = new TextEncoder();
-      const data = encoder.encode(password);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const password_hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-      console.log('Entered password hash:', password_hash);
-      console.log('Stored hash:', admin.password_hash);
-
-      // Compare with stored hash
-      if (password_hash !== admin.password_hash) {
-        setError('Invalid email or password');
+      // Check if the logged-in user is the admin
+      const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'the4therfirm@gmail.com';
+      if (data.user.email !== adminEmail) {
+        await supabase.auth.signOut();
+        setError('Access denied. Only admin can login.');
         setLoading(false);
         return;
       }
-
-      localStorage.setItem('adminSession', JSON.stringify({
-        email: admin.email,
-        isAdmin: true,
-        loginTime: Date.now()
-      }));
 
       router.push('/admin');
     } catch (err) {

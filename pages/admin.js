@@ -1,31 +1,32 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { supabase, isAdmin } from '../lib/supabase';
 import Home from './index';
 
 export default function Admin() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const session = localStorage.getItem('adminSession');
-    if (session) {
-      try {
-        const data = JSON.parse(session);
-        if (data.isAdmin && Date.now() - data.loginTime < 3600000) {
-          setIsAdmin(true);
-          return;
-        }
-      } catch (e) {}
-    }
-    router.push('/login');
+    const checkAuth = async () => {
+      const admin = await isAdmin();
+      if (admin) {
+        setIsAuthenticated(true);
+      } else {
+        router.push('/login');
+      }
+      setLoading(false);
+    };
+    checkAuth();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminSession');
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     router.push('/login');
   };
 
-  if (!isAdmin) {
+  if (loading) {
     return (
       <div className="container">
         <div className="card" style={{ textAlign: 'center', padding: '40px' }}>
@@ -33,6 +34,10 @@ export default function Admin() {
         </div>
       </div>
     );
+  }
+
+  if (!isAuthenticated) {
+    return null;
   }
 
   return (

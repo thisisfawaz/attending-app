@@ -2033,4 +2033,62 @@ export function ParticipantView({ campaignId }) {
   );
 }
 
-export default Home;
+// Main App Router
+export function AppRouter() {
+  const [campaignId, setCampaignId] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      // Check if there's a campaign in URL (for backward compatibility)
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('campaign');
+      if (id) {
+        setCampaignId(id);
+        setLoading(false);
+        return;
+      }
+
+      // Check Supabase Auth session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'the4therfirm@gmail.com';
+        if (session.user.email === adminEmail) {
+          setIsAdmin(true);
+          setLoading(false);
+          return;
+        }
+      }
+      
+      // Not logged in, redirect to login
+      window.location.href = '/login';
+    };
+
+    checkAuth();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="container">
+        <div className="card" style={{ textAlign: 'center', padding: '40px' }}>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // If there's a campaign ID, show participant view (public)
+  if (campaignId) {
+    return <ParticipantView campaignId={campaignId} />;
+  }
+
+  // Otherwise show admin panel (requires login)
+  if (!isAdmin) {
+    return null;
+  }
+
+  return <Home isAdmin={isAdmin} />;
+}
+
+export default AppRouter;
