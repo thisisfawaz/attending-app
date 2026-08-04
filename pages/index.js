@@ -2053,7 +2053,7 @@ export function AppRouter() {
       // Check Supabase Auth session
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'the4therfirm@gmail.com';
+        const adminEmail = process.env.ADMIN_EMAIL || 'the4therfirm@gmail.com';
         if (session.user.email === adminEmail) {
           setIsAdmin(true);
           setLoading(false);

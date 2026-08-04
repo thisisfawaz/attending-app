@@ -14,7 +14,7 @@ export default function Login() {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'the4therfirm@gmail.com';
+        const adminEmail = process.env.ADMIN_EMAIL || 'the4therfirm@gmail.com';
         if (session.user.email === adminEmail) {
           router.push('/admin');
         }
@@ -42,7 +42,7 @@ export default function Login() {
       }
 
       // Check if the logged-in user is the admin
-      const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'the4therfirm@gmail.com';
+      const adminEmail = process.env.ADMIN_EMAIL || 'the4therfirm@gmail.com';
       if (data.user.email !== adminEmail) {
         await supabase.auth.signOut();
         setError('Access denied. Only admin can login.');
