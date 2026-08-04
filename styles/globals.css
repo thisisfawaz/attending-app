@@ -1,0 +1,230 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: #f0f4fa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 28px;
+    padding: 40px 36px;
+    box-shadow: 0 20px 60px rgba(0, 20, 40, 0.12);
+    transition: all 0.2s ease;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #0b1f33;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+}
+
+.subhead {
+    color: #4a617a;
+    font-size: 1rem;
+    margin-bottom: 28px;
+    border-bottom: 2px solid #ecf2f9;
+    padding-bottom: 18px;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    color: #1a314b;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"] {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #dce5ef;
+    border-radius: 16px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fafcff;
+    color: #0b1f33;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="url"]:focus {
+    outline: none;
+    border-color: #1f3a57;
+    box-shadow: 0 0 0 4px rgba(31, 58, 87, 0.08);
+}
+
+.banner-preview {
+    margin: 16px 0 24px;
+    padding: 12px;
+    background: #f8fbfe;
+    border-radius: 12px;
+    border: 2px dashed #dce5ef;
+}
+
+.upload-area {
+    border: 3px dashed #dce5ef;
+    border-radius: 16px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #fafcff;
+}
+
+.upload-area:hover {
+    border-color: #1f3a57;
+    background: #f0f5ff;
+}
+
+.upload-area.drag-active {
+    border-color: #1f3a57;
+    background: #eaf0fa;
+    transform: scale(1.01);
+}
+
+.upload-content {
+    pointer-events: none;
+}
+
+.upload-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.upload-text {
+    font-size: 1rem;
+    color: #1a314b;
+    margin-bottom: 6px;
+}
+
+.upload-link {
+    color: #1f3a57;
+    font-weight: 600;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.upload-link:hover {
+    color: #0b1f33;
+}
+
+.upload-hint {
+    font-size: 0.85rem;
+    color: #6b7f93;
+}
+
+.btn {
+    display: inline-block;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 40px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-primary {
+    background: #1f3a57;
+    color: white;
+    box-shadow: 0 8px 18px rgba(31, 58, 87, 0.18);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #142b42;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(31, 58, 87, 0.2);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: #ecf2f9;
+    color: #1a314b;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.btn-secondary:hover {
+    background: #dee7f2;
+    transform: translateY(-2px);
+}
+
+.confirmation {
+    text-align: center;
+    padding: 10px 0 6px;
+}
+
+.confirmation h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #0b1f33;
+    margin-bottom: 20px;
+    line-height: 1.3;
+}
+
+.event-details {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #ecf2f9;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 16px;
+    color: #2e4a69;
+    font-size: 0.9rem;
+    font-weight: 450;
+}
+
+.event-details span {
+    background: #f4f9ff;
+    padding: 6px 18px;
+    border-radius: 40px;
+    display: inline-block;
+}
+
+.info-box {
+    margin-top: 20px;
+    padding: 16px;
+    background: #f8fbfe;
+    border-radius: 12px;
+    border-left: 4px solid #1f3a57;
+}
+
+@media (max-width: 500px) {
+    .card {
+        padding: 28px 18px;
+    }
+    h1 {
+        font-size: 1.6rem;
+    }
+}
