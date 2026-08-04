@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }) {
         <meta property="og:url" content="https://events.4ther.com/" />
         <meta property="og:title" content="Banner Generator - Create Your Personalized Banner" />
         <meta property="og:description" content="Create personalized banners for events, conferences, and campaigns. Upload your photo, add your name, and generate a custom banner." />
-        <meta property="og:image" content="meet.png" />
+        <meta property="og:image" content="https://events.4ther.com/meet.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         
@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }) {
         <meta name="twitter:url" content="https://events.4ther.com/" />
         <meta name="twitter:title" content="Banner Generator - Create Your Personalized Banner" />
         <meta name="twitter:description" content="Create personalized banners for events, conferences, and campaigns. Upload your photo, add your name, and generate a custom banner." />
-        <meta name="twitter:image" content="meet.png" />
+        <meta name="twitter:image" content="https://events.4ther.com/meet.png" />
         
         {/* Theme Color */}
         <meta name="theme-color" content="#E2171D" />
