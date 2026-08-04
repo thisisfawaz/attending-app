@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { ParticipantView } from './index';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 export default function SlugPage() {
   const [campaignId, setCampaignId] = useState(null);
+  const [campaignData, setCampaignData] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { slug } = router.query;
@@ -17,27 +19,21 @@ export default function SlugPage() {
       }
       
       try {
-        console.log('Looking for slug:', slug);
-        
-        // Find campaign by shareable_code
         const { data, error } = await supabase
           .from('campaigns')
           .select('*')
           .eq('shareable_code', slug.toLowerCase())
           .single();
 
-        console.log('Query result:', data, error);
-
         if (data) {
           setCampaignId(data.campaign_id);
+          setCampaignData(data);
         } else {
-          // Campaign not found
           alert('Campaign not found. Please check the URL.');
           router.push('/');
         }
       } catch (error) {
         console.error('Error finding campaign:', error);
-        alert('Error finding campaign. Please try again.');
         router.push('/');
       } finally {
         setLoading(false);
@@ -59,7 +55,7 @@ export default function SlugPage() {
     );
   }
 
-  if (!campaignId) {
+  if (!campaignId || !campaignData) {
     return (
       <div className="container">
         <div className="card" style={{ textAlign: 'center', padding: '40px' }}>
@@ -84,5 +80,28 @@ export default function SlugPage() {
     );
   }
 
-  return <ParticipantView campaignId={campaignId} />;
+  return (
+    <>
+      <Head>
+        <title>{campaignData.name} - Banner Generator</title>
+        <meta name="description" content={`Create your personalized banner for ${campaignData.name}`} />
+        
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`https://events.4ther.com/${slug}`} />
+        <meta property="og:title" content={`${campaignData.name} - Banner Generator`} />
+        <meta property="og:description" content={`Create your personalized banner for ${campaignData.name}`} />
+        <meta property="og:image" content={campaignData.banner_url} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${campaignData.name} - Banner Generator`} />
+        <meta name="twitter:description" content={`Create your personalized banner for ${campaignData.name}`} />
+        <meta name="twitter:image" content={campaignData.banner_url} />
+      </Head>
+      <ParticipantView campaignId={campaignId} />
+    </>
+  );
 }
